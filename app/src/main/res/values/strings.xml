@@ -14,5 +14,6 @@
     <string name="previous_button">Prev</string>
     <string name="previous_Description">이전 버튼</string>
     <string name="next_Description">다음 버튼</string>
+    <string name="correctedQuestionText">정답 처리되었습니다.</string>
 
 </resources>

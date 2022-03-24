@@ -1,31 +1,30 @@
 package com.jms.a20220324_chapter1
 
 import android.app.Activity
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.Toast
 import androidx.core.view.isVisible
+import androidx.lifecycle.ViewModelProvider
 import com.jms.a20220324_chapter1.Model.Question
 import com.jms.a20220324_chapter1.databinding.ActivityMainBinding
 
+private val TAG = "MainActivity"
+
 class MainActivity : AppCompatActivity() {
     private lateinit var binding : ActivityMainBinding
-    private val questionBank = listOf(
-        Question(R.string.question_africa,false),
-        Question(R.string.question_americas,true),
-        Question(R.string.question_asia,true),
-        Question(R.string.question_australia, true),
-        Question(R.string.question_mideast, false),
-        Question(R.string.question_oceans,true)
-    )
-    private var currentIndex = 0
 
-    private val correctBank = Array<Boolean>(questionBank.size){false}
+    private val quizViewModel : QuizViewModel by lazy {
+        Log.d(TAG,"QuizViewModel 객체 가져옴")
+        ViewModelProvider(this).get(QuizViewModel::class.java)
+    }
 
     private val nextButtonListener = View.OnClickListener {
-        currentIndex = (currentIndex + 1) % questionBank.size
+        quizViewModel.moveToNext()
         setActivateButton()
         updateQuestion()
     }
@@ -33,39 +32,35 @@ class MainActivity : AppCompatActivity() {
 
 
     private val previousButtonListener = View.OnClickListener {
-        val helpIndex = currentIndex - 1
-        currentIndex = if(helpIndex < 0) {
-            helpIndex + questionBank.size
-        } else {
-            helpIndex
-        }
+        quizViewModel.moveToPrev()
         setActivateButton()
         updateQuestion()
     }
 
     private fun setActivateButton() {
-        if(correctBank[currentIndex]) {
-            binding.falseButton.isClickable = false
-            binding.trueButton.isClickable = false
+        if(quizViewModel.correctAnswer) {
+            binding.falseButton.isVisible = false
+            binding.trueButton.isVisible = false
+            binding.correctedComment!!.visibility = View.VISIBLE
         } else {
-            binding.falseButton.isClickable = true
-            binding.trueButton.isClickable = true
+            binding.falseButton.isVisible = true
+            binding.trueButton.isVisible = true
+            binding.correctedComment!!.visibility = View.INVISIBLE
         }
 
     }
 
     private fun updateQuestion() {
 
-        val questionTextResId = questionBank[currentIndex].textResId
+        val questionTextResId = quizViewModel.currentQuestionText
         binding.questionTextView.setText(questionTextResId)
 
     }
 
     private fun checkAnswer(userAnswer: Boolean) {
-
-        val correctAnswer = questionBank[currentIndex].answer
-        val messageResId = if(correctAnswer==userAnswer){
-            correctBank[currentIndex]=true
+        val correctAnswer = quizViewModel.correctAnswer
+        val messageResId = if(correctAnswer==userAnswer) {
+            quizViewModel.setCorrectBank(answer = true)
             R.string.correct_toast
         } else {
             R.string.incorrect_toast
@@ -77,8 +72,13 @@ class MainActivity : AppCompatActivity() {
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.d(TAG,"onCreated() called")
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+
+
+
         updateQuestion()
 
         binding.questionTextView.setOnClickListener(nextButtonListener)
@@ -98,4 +98,30 @@ class MainActivity : AppCompatActivity() {
         }
 
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d(TAG,"onDestroyed() called")
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.d(TAG,"onStart() called")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d(TAG,"onResume() called")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d(TAG,"onPause() called")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d(TAG,"onStop() called")
+    }
+
 }
