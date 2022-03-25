@@ -2,8 +2,8 @@
     <!-- Base application theme. -->
     <style name="Theme.20220324_Chapter1_Style" parent="Theme.AppCompat.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">#FFF38181</item>
-        <item name="colorPrimaryVariant">#F65454</item>
+        <item name="colorPrimary">@color/brightBlue</item>
+        <item name="colorPrimaryVariant">#03045E</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/teal_200</item>
