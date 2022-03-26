@@ -10,8 +10,9 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="coralPink">#FB6A87</color>
     <color name="skyBlue">#67C8E9</color>
-
+    <color name="lightGreyBlue">#92A9BD</color>
     <color name="deepBlue">#03045E</color>
     <color name="brightBlue">#00B4D8</color>
     <color name="lightBlue">#90E0EF</color>

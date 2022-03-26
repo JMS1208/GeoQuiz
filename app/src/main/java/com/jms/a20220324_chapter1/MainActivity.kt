@@ -1,15 +1,19 @@
 package com.jms.a20220324_chapter1
 
 import android.app.Activity
+import android.app.ActivityOptions
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.Toast
+import androidx.annotation.RequiresApi
+import androidx.core.app.ActivityOptionsCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import com.jms.a20220324_chapter1.Model.Question
@@ -19,13 +23,13 @@ private const val TAG = "MainActivity"
 private const val KEY_INDEX = "index"
 private const val KEY_CORRECTBANK = "correctBank"
 private const val KEY_CUNNING = "cunning"
+const val KEY_CUNNING_CHANCE = "cunning_chance"
 private const val REQUEST_CODE_CHEAT = 0
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding : ActivityMainBinding
 
     private val quizViewModel : QuizViewModel by lazy {
-        Log.d(TAG,"QuizViewModel 객체 가져옴")
         ViewModelProvider(this).get(QuizViewModel::class.java)
     }
 
@@ -43,15 +47,17 @@ class MainActivity : AppCompatActivity() {
         updateQuestion()
     }
 
+
+
     private fun setButtonActivated() {
         if(quizViewModel.correctAnswer) {
             binding.falseButton.isVisible = false
             binding.trueButton.isVisible = false
-            binding.correctedComment!!.visibility = View.VISIBLE
+            binding.correctedComment.visibility = View.VISIBLE
         } else {
             binding.falseButton.isVisible = true
             binding.trueButton.isVisible = true
-            binding.correctedComment!!.visibility = View.INVISIBLE
+            binding.correctedComment.visibility = View.INVISIBLE
         }
 
     }
@@ -91,8 +97,20 @@ class MainActivity : AppCompatActivity() {
             quizViewModel.isCheater = cunningArr
         }
 
+        val cunningChance = savedInstanceState?.getInt(KEY_CUNNING_CHANCE)
+        if(cunningChance != null) {
+            quizViewModel.cunningChance = cunningChance
+        }
+
+
+
+
     }
 
+    private fun setCunningChanceNumber() {
+        val cunningChanceNumber =  "(${quizViewModel.cunningChance}/${quizViewModel.maxCunningChance})"
+        binding.cunningChanceNumber.text = cunningChanceNumber
+    }
 
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -101,6 +119,8 @@ class MainActivity : AppCompatActivity() {
         outState.putInt(KEY_INDEX, quizViewModel.currentIndex)
         outState.putBooleanArray(KEY_CORRECTBANK,quizViewModel.correctBank)
         outState.putBooleanArray(KEY_CUNNING,quizViewModel.isCheater)
+        outState.putInt(KEY_CUNNING_CHANCE,quizViewModel.cunningChance)
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -111,10 +131,17 @@ class MainActivity : AppCompatActivity() {
         }
 
         if(requestCode == REQUEST_CODE_CHEAT) {
+
+            quizViewModel.cunningChance-=1
+
             quizViewModel.isCheater[quizViewModel.currentIndex] =
                 data?.getBooleanExtra(EXTRA_ANSWER_SHOWN, false) ?: false
+
+            setCunningChanceNumber()
+
         }
     }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -124,8 +151,12 @@ class MainActivity : AppCompatActivity() {
 
         initSavedInstanceStateData(savedInstanceState)
 
+        setCunningChanceNumber()
+
         setButtonActivated()
         updateQuestion()
+
+
 
         binding.questionTextView.setOnClickListener(nextButtonListener)
 
@@ -144,9 +175,17 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.cheatButton.setOnClickListener {
-            val answerIsTrue = quizViewModel.currentQuestionAnswer
-            val intent = CheatActivity.newIntent(this,answerIsTrue)
-            startActivityForResult(intent, REQUEST_CODE_CHEAT)
+            val cunningChance = quizViewModel.cunningChance
+            if(cunningChance > 0) {
+                val answerIsTrue = quizViewModel.currentQuestionAnswer
+                val intent = CheatActivity.newIntent(this, answerIsTrue)
+                val options =
+                    ActivityOptionsCompat.makeClipRevealAnimation(it, 0, 0, it.width, it.height)
+
+                startActivityForResult(intent, REQUEST_CODE_CHEAT, options.toBundle())
+            } else {
+                Toast.makeText(applicationContext, R.string.cannot_cunning_toast, Toast.LENGTH_SHORT).show()
+            }
         }
 
     }

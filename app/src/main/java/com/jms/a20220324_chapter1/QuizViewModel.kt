@@ -7,10 +7,6 @@ import com.jms.a20220324_chapter1.Model.Question
 private val TAG = "QuizViewModel"
 
 class QuizViewModel : ViewModel() {
-    init {
-        Log.d(TAG, "ViewModel 객체 생성됨")
-    }
-
 
     private val questionBank = listOf(
         Question(R.string.question_africa,false),
@@ -25,6 +21,8 @@ class QuizViewModel : ViewModel() {
 
     var currentIndex = 0
 
+    var cunningChance = 3
+    val maxCunningChance = 3
     var correctBank = BooleanArray(questionBank.size){false}
 
     val currentQuestionAnswer: Boolean

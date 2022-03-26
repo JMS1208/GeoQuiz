@@ -7,10 +7,11 @@
         <entry key="..\:/MyAndroid/20220324_Chapter1/app/src/main/res/drawable/button_style1.xml" value="0.166" />
         <entry key="..\:/MyAndroid/20220324_Chapter1/app/src/main/res/drawable/button_style2.xml" value="0.195" />
         <entry key="..\:/MyAndroid/20220324_Chapter1/app/src/main/res/drawable/ic_launcher_background.xml" value="0.195" />
+        <entry key="..\:/MyAndroid/20220324_Chapter1/app/src/main/res/drawable/text_style1.xml" value="0.187" />
         <entry key="..\:/MyAndroid/20220324_Chapter1/app/src/main/res/font/font_size.xml" value="0.23981481481481481" />
         <entry key="..\:/MyAndroid/20220324_Chapter1/app/src/main/res/layout-land/activity_main.xml" value="0.21" />
-        <entry key="..\:/MyAndroid/20220324_Chapter1/app/src/main/res/layout/activity_cheat.xml" value="0.33" />
-        <entry key="..\:/MyAndroid/20220324_Chapter1/app/src/main/res/layout/activity_main.xml" value="0.33" />
+        <entry key="..\:/MyAndroid/20220324_Chapter1/app/src/main/res/layout/activity_cheat.xml" value="0.25" />
+        <entry key="..\:/MyAndroid/20220324_Chapter1/app/src/main/res/layout/activity_main.xml" value="0.25" />
       </map>
     </option>
   </component>

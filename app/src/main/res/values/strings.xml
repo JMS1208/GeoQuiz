@@ -20,5 +20,11 @@
     <string name="show_answer_button">정답 보기</string>
     <string name="cheat_button">커닝하기!</string>
     <string name="judgment_toast">커닝은 나쁜 짓이죠!</string>
+    <string name="cunning_chance">남은 횟수:</string>
+    <string name="cunning_chance_number">(3/3)</string>
+    <string name="question_title">Quiz!?</string>
+    <string name="returnToMainActivityButton">돌아가기</string>
+
+    <string name="cannot_cunning_toast">"더 이상 커닝할 수 없습니다."</string>
 
 </resources>
